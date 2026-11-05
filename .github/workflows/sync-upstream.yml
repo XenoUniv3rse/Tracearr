@@ -1,0 +1,45 @@
+name: Sync Upstream
+
+# Merge connorgallopo/Tracearr main into this fork's main.
+# Pushing with a PAT (not GITHUB_TOKEN) so the push triggers docker-build.yml
+# and is allowed to update files under .github/workflows.
+on:
+  schedule:
+    - cron: '17 * * * *' # hourly
+  workflow_dispatch:
+
+concurrency:
+  group: sync-upstream
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    if: github.repository == 'XenoUniv3rse/Tracearr'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ secrets.SYNC_PAT }}
+
+      - name: Merge upstream
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git remote add upstream https://github.com/connorgallopo/Tracearr.git
+          git fetch upstream main
+
+          if git merge-base --is-ancestor upstream/main HEAD; then
+            echo "Already up to date with upstream."
+            exit 0
+          fi
+
+          if ! git merge --no-edit upstream/main; then
+            echo "::error::Merge conflict with upstream. Resolve manually: git fetch upstream && git merge upstream/main"
+            git merge --abort
+            exit 1
+          fi
+
+          git push origin main
