@@ -1411,6 +1411,7 @@
         "sessionPaused": "strumień zostaje wstrzymany",
         "sessionHeldFor": "strumień pozostaje wstrzymany przez {{duration}}",
         "sessionHeldForTotal": "strumień był wstrzymany łącznie przez {{duration}}",
+        "sessionWatched": "",
         "accountInactiveFor": "konto pozostaje nieaktywne przez {{duration}}",
         "accountNewDevice": "konto odtwarza z nowego urządzenia",
         "accountTrustChanged": "zmienia się wynik zaufania konta",
@@ -2183,6 +2184,10 @@
           "label": "Strumień jest wstrzymany",
           "description": "Strumień jest wstrzymany dłużej niż ustawiona liczba minut.",
           "synonyms": "pauza, bezczynny, porzucony, zawieszony, afk"
+        },
+        "sessionWatched": {
+          "description": "",
+          "synonyms": ""
         },
         "accountInactiveFor": {
           "label": "Konto przestaje być aktywne",
@@ -3049,6 +3054,7 @@
         "libraryAll": "Dowolna biblioteka",
         "yearFromLabel": "Od roku",
         "yearToLabel": "Do roku",
+        "addedLabel": "",
         "sizeGbMinLabel": "Min. rozmiar (GB)",
         "sizeGbMaxLabel": "Maks. rozmiar (GB)",
         "sizeChipAtLeast": "≥ {{min}} GB",
