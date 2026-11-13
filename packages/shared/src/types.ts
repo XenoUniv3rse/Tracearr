@@ -14,6 +14,7 @@ import type { NotificationToast } from './destinations.js';
 import type { ListMeta } from './listQuery.js';
 import type { UpgradeWarning } from './releaseNotes.js';
 import type { ResolutionBucket } from './resolution.js';
+import type { ServerType } from './serverTypes.js';
 import type { LibraryMediaType, PlaysMediaGroup, statPeriodSchema } from './schemas.js';
 import type { z } from 'zod';
 import type { LOGIN_ACCESS } from './constants.js';
@@ -42,8 +43,7 @@ export const hasMinRole = (userRole: UserRole, required: 'owner' | 'admin' | 'me
 export const isOwner = (role: UserRole): boolean => role === 'owner';
 export const isActive = (role: UserRole): boolean => canLogin(role);
 
-// Server types
-export type ServerType = 'plex' | 'jellyfin' | 'emby';
+export type { ServerType };
 
 export interface Server {
   id: string;
@@ -332,6 +332,8 @@ export interface SetupStatus {
     oidc: boolean;
     oidcProviderName: string | null;
     member: boolean;
+    /** SSO-only is hiding the owner's and admins' other methods; /login?all shows them. */
+    ssoOnly: boolean;
   };
   memberLoginServers: { id: string; name: string; type: ServerType; quickConnect: boolean }[];
 }
@@ -1173,6 +1175,8 @@ export interface Settings {
   preferredPosterServerId: string | null;
   // Members see anonymous counts of other people's activity: others watching, title totals, Most Popular, popularity sorts
   memberServerActivity: boolean;
+  // Admins and members sign in only through SSO; their Plex, Jellyfin and Emby sign-in is refused
+  memberSsoOnly: boolean;
 }
 
 /** GET and PATCH /settings: the settings plus deployment facts that are not settings. */
@@ -1622,7 +1626,7 @@ export interface UserFilterOption {
 export interface ServerFilterOption {
   id: string;
   name: string;
-  type: 'plex' | 'jellyfin' | 'emby';
+  type: ServerType;
 }
 
 /**
@@ -1727,7 +1731,7 @@ export interface MobilePairResponse {
   server: {
     id: string;
     name: string;
-    type: 'plex' | 'jellyfin' | 'emby';
+    type: ServerType;
   };
   user: {
     userId: string;
